@@ -1,18 +1,27 @@
-const discord = require("discord.js");
+module.exports = {
+    name: "serverinfo",
+    description: "Gives server information",
+    category: "Information",
+    execute(message, arguements, client) {
+        const serverEmbed = {
+            title: "Server Information",
+            description: "Set a description",
+            fields: [
+                {
+                    name: "Bot name",
+                    value: client.user.username
+                },
+                {
+                    name: "You joined this server",
+                    value: message.member.joinedAt
+                },
+                {
+                    name: "Total members",
+                    value: message.guild.memberCount
+                }
+            ],
+        }
 
-module.exports.run = async (client, message, args) => {
-
-    var serverEmbed = new discord.MessageEmbed()
-            .setDescription("Set a discription")
-            .setColor("#color")
-            .addField("Bot name", client.user.username)
-            .addField("You joined this server", message.member.joinedAt)
-            .addField("total memebers", message.guild.memberCount);
-
-        return message.channel.send(serverEmbed);
-
-}
- 
-module.exports.help = {
-    name: "serverinfo"
+        message.channel.send({ content: message.author.toString(), embed: serverEmbed });
+    },
 }

@@ -11,49 +11,33 @@ client.on("ready", async () => {
     client.user.setActivity("BETA", "PLAYING");
 })
 
-fs.readdir("./commands/", (err, files) => {
+const commandos = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
-    if (err) console.log(err);
-
-    var jsFiles = files.filter(f => f.split(".").pop() === "js");
-
-    if (jsFiles.length <= 0) {
-        console.log("Kon geen files vinden!");
-        return; 
-    }
-    
-    jsFiles.forEach((f,i) => {
-
-        var fileGet = require(`./commands/${f}`);
-        console.log(`${f} is geladen!`);
-
-        
-    });
-});
+for(const command of commandos) {
+    const currentCommand = require(`./commands/${command}`);
+    client.cmd.set(currentCommand.name, currentCommand);
+}
 
 client.on("message", message => {
-    
-    var prefix = Config.prefix;
+    if (message.author.bot) return;
+     
+    if(!message.content.startsWith(Config.prefix)) {
+        return;
+    }
 
     if (message.author.bot) return;
+     if (message.channel.type == "dm") return;
 
-    if (message.channel.type == "dm") return;
+    const arguments = message.content.slice(Config.prefix.length).trim().split(/ +/);
+	const command = arguments.shift().toLowerCase();
 
-    var messageArray = message.content.split(" ");
-
-    var command = messageArray[0];
-
-    var args = messageArray.slice(1); 
-
-    if (!command.startsWith(prefix)) return;
-
-    var cmd = client.cmd.get(command.slice(prefix.length));
-
-    if (!cmd) return;
-
-    if (cmd) cmd.run(client, message, args);
+    try {
+        client.cmd.get(command).execute(message, arguments, client);
+    } catch (error) {
+        console.log("Something went very wrong!", error);
+    }
 
 });
 
 
-client.login('ODAxNTgxNzc1MzA2MjI3NzIy.YAixMw.G4Zmq2tJ3iO51r_4HyLjDy_tZRE');
+client.login(Config.token);
