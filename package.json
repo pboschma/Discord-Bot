@@ -2,19 +2,17 @@
   "name": "hangout",
   "version": "1.0.0",
   "description": "Hangout bot ",
-  "main": "index.js",
-  "dependencies": {
-    "discord.js": "^12.3.1",
-    "nodemon": "^2.0.5" 
-  },
-    "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon"
-  },
-  "keywords": [
+  "author": "Swakken",
+  "license": "ISC",
+    "keywords": [
     "Discord",
     "Bot"
   ],
-  "author": "Swakken",
-  "license": "ISC"
+  "scripts": {
+        "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^12.3.1",
+    "nodemon": "^2.0.5" 
+  }
 }
